@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
+using DG.Tweening;
 using UnityEngine.SceneManagement;
 
 public class MovingCube : MonoBehaviour
@@ -12,7 +13,7 @@ public class MovingCube : MonoBehaviour
     public static MovingCube LastCube { get; private set; }
     public MoveDirection MoveDirection { get; set; }
 
-
+    
     private void OnEnable()
     { 
         
@@ -30,7 +31,8 @@ public class MovingCube : MonoBehaviour
     {
         if (MoveDirection==MoveDirection.Z)
         {
-            transform.position += transform.forward * Time.deltaTime * moveSpeed;    
+            transform.position += transform.forward * Time.deltaTime * moveSpeed;
+            
         }else
             transform.position += transform.right * Time.deltaTime * moveSpeed;
     }
@@ -40,10 +42,7 @@ public class MovingCube : MonoBehaviour
         moveSpeed = 0;
         float hangover = GetHangover();
         Debug.Log(hangover);
-        if (MoveDirection==MoveDirection.Z)
-            SetPosCubeOnZ(hangover);
-        else
-            SetPosCubeOnX(hangover);
+        SetPosCube(hangover);
     }
 
     private float GetHangover()
@@ -55,7 +54,7 @@ public class MovingCube : MonoBehaviour
         
     }
 
-    private void SetPosCubeOnX(float hangover)
+    private void SetPosCube(float hangover)
     {
         if (Mathf.Abs(hangover)>0.6f)
         { 
@@ -72,24 +71,4 @@ public class MovingCube : MonoBehaviour
         }
         
     }
-    
-    private void SetPosCubeOnZ(float hangover)
-    {
-        if (Mathf.Abs(hangover)>0.6f)
-        { 
-            CurrentCube.GetComponent<Rigidbody>().useGravity = true;
-            /*LastCube = null;    DEATH
-            CurrentCube = null;
-            sceneManager.LoadScene(0);*/
-        }
-        else
-        { 
-            transform.position=new Vector3(transform.position.x,transform.position.y,transform.position.z);
-            Destroy(CurrentCube.GetComponent<Rigidbody>());
-            LastCube = this;
-        }
-        
-    }
-
-    
 }
